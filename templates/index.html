@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+    <title>Proyecto - Covid19 over the world</title>
+</head>
+<body>
+   <!-- Navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Data Base</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/create_table">Delete and Create Table</a></li>
+                            <li><a class="dropdown-item" href="/actualise_table">Actualise Table</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://www.argentina.gob.ar/salud/coronavirus-COVID-19">Ministerio de Salud ARG</a>
+                    </li>   
+                </ul>
+            </div>
+        </div>
+    </nav>
+        
+    <!-- Main Title -->
+    <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+        <h1 class="display-4 font-italic text-center">Proyecto Final Python Analytics</h1>
+        <p class="lead my-3 text-center">En el presente website se visualizaran diversos graficos extraidos desde un json por una web 
+            oficial de la Union Europea sobre el avance del Covid-19 a lo largo del mundo.</p>
+        <p class="lead my-3 text-center">Por último se agregara predicciones a traves de machine learning.</p>
+    </div>
+    
+    <!-- START THE FEATURE SECTIONS -->
+    <div>
+        <!-- First dividing line -->        
+        <hr class="featurette-divider"> 
+        <div class="row featurette">
+            <div class="col-md-7 px-5">
+                <h2 class="featurette-heading">Contagios Globales: <span class="text-muted">Por Continente</span></h2>
+                <p class="lead">Grafico de barra que muestra el avance de casos de contagio total en el mundo por contiente.</p>
+            </div>
+            <div class="col-md-5">
+                <a href="{{ url_for('bar_graph_continent') }}">Show Graph</a>
+            </div>
+        </div>
+        
+        <!-- Second dividing line -->
+        <hr class="featurette-divider"> 
+        <div class="row featurette">
+            <div class="col-md-7 px-5">
+                <h2 class="featurette-heading">Muertes Globales: <span class="text-muted">Por Continente</span></h2>
+                <p class="lead">Grafico de barra que muestra el avance de casos de muertes total en el mundo por contiente.</p>
+            </div>
+            <div class="col-md-5">
+                <a href="{{ url_for('bar_graph_continent_death') }}">Show Graph</a>
+            </div>
+        </div>
+        
+        <!-- Third dividing line -->
+        <hr class="featurette-divider"> 
+        <div class="row featurette">
+            <div class="col-md-7 px-5">
+                <h2 class="featurette-heading">Tabla Top 10: <span class="text-muted">Contagios por Pais</span></h2>
+                <p class="lead">Tabla donde muestra el top 10 de los paises en el mundo que la peor situacion de contagios por pais.</p>
+            </div>
+            <div class="col-md-5">
+                <a href="{{ url_for('ranking_table_graph') }}">Show Graph</a>
+            </div>
+        </div>
+
+        <!-- Fourth dividing line -->
+        <hr class="featurette-divider"> 
+        <div class="row featurette">
+            <div class="col-md-7 px-5">
+                <h2 class="featurette-heading">Tabla Top 10: <span class="text-muted">Muertes por Pais.</span></h2>
+                <p class="lead">Tabla donde muestra el top 10 de los paises en el mundo con la peor situacion de muertes por pais.</p>
+            </div>
+            <div class="col-md-5">
+                <a href="{{ url_for('ranking_table_graph_death') }}">Show Graph</a>
+            </div>
+        </div>
+        
+        <!-- Fifth dividing line -->
+        <hr class="featurette-divider"> 
+        <div class="row featurette">
+            <div class="col-md-7 px-5">
+                <h2 class="featurette-heading">Avance de Contagios: <span class="text-muted">Por Contienente.</span></h2>
+                <p class="lead">Grafico de linea temporal (semanal) que muestra el avance de casos de contagio total en el mundo por contienente.</p>
+            </div>
+            <div class="col-md-5">
+                <a href="{{ url_for('line_graph') }}">Show Graph</a>
+            </div>
+        </div>
+        
+        <!-- Sixth dividing line -->
+        <hr class="featurette-divider"> 
+        <div class="row featurette">
+            <div class="col-md-7 px-5">
+                <h2 class="featurette-heading">Avance de muertes: <span class="text-muted">Por Contienente.</span></h2>
+                <p class="lead">Grafico de linea temporal (semanal) que muestra el avance de casos de muertes total en el mundo por contienente.</p>
+            </div>
+            <div class="col-md-5">
+                <a href="{{ url_for('line_graph_death') }}">Show Graph</a>
+            </div>
+        </div>
+        
+        <!-- Seventh dividing line -->
+        <hr class="featurette-divider"> 
+        <div class="row featurette">
+            <div class="col-md-7 px-5">
+                <h2 class="featurette-heading">Avances de Contagios vs Muertes: <span class="text-muted">Por Pais</span></h2>
+                <p class="lead">Grafico de linea temporal (semanal) que muestra el avance de casos de contagio\muertes total por pais.</p>
+            </div>
+            <div class="col-md-5">
+                <div class="form-floating mb-3">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        {{ form.country.label }}<span class="text-danger">*</span><br>{{ form.country() }}
+                        <br><br>
+                        {{ form.submit() }}
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <hr class="featurette-divider">    
+    </div>
+    <!-- /END THE FEATURE SECTIONS -->
+        
+    <!-- FOOTER -->
+    <footer class="container">
+        <p class="float-end"><a href="#">Back to top</a></p>
+        <p>2020-2021 Inove School. &middot; <a href="https://inove.com.ar/">Website</a> &middot; <a href="https://inove.com.ar/desarrolladorpython/">Curso Python Developer</a></p>
+    </footer>
+
+</body>
+
+
+</html>
