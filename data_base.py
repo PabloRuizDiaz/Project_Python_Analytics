@@ -23,20 +23,53 @@ Sus Campos son:
     [countries_and_territories] -> Paises y territorios mundiales
     [geo_id] -> identificador geografico
     [country_territory_Code] -> Codigo mundial del territorio
-    [pop_data_2019] -> 
+    [pop_data_2019] -> poblacion en 2019
     [continent_exp] -> 
     [Cumulative_number_for_14_days_of_COVID_19_cases_per_100000] ->
 '''
 
+__author__ = "Pablo Martin Ruiz Diaz"
+__email__ = "rd.pablo@gmail.com"
+__version__ = "2.0"
+
 
 ##################### Librerias #####################
-# Libreria para Base de datos
+# Libreria JSON
 import requests
 import json
+# Libreria Base de datos
 import sqlite3
+import os
+from datetime import datetime, timedelta
+# Libreria ORM
+from flask_sqlalchemy import SQLAlchemy
 
 
 API_REQUEST = 'https://opendata.ecdc.europa.eu/covid19/casedistribution/json'
+
+
+db = SQLAlchemy()
+
+class table_covid_world(db.Model):
+    __tablename__ = "table_covid_world"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    date_rep = db.Column(db.DateTime)
+    year_week = db.Column(db.String)
+    cases_weekly = db.Column(db.Integer)
+    deaths_weekly = db.Column(db.Integer)
+    countries_and_territories = db.Column(db.String)
+    geo_id = db.Column(db.String)
+    country_territory_Code = db.Column(db.String)
+    pop_data_2019 = db.Column(db.Integer)
+    continent_exp = db.Column(db.String)
+    Cumulative_number_for_14_days_of_COVID_19_cases_per_100000 = db.Column(db.Integer)
+    
+    def __repr__(self):
+        return f"""id {self.id}\ndate_rep {self.date_rep}\nyear_week {self.year_week}\ncases_weekly {self.cases_weekly}\n
+                deaths_weekly {self.deaths_weekly}\ncountries_and_territories {self.countries_and_territories}\ngeo_id {self.geo_id}\n
+                country_territory_Code {self.country_territory_Code}\npop_data_2019 {self.pop_data_2019}\ncontinent_exp {self.continent_exp}\n
+                Cumulative_number_for_14_days_of_COVID_19_cases_per_100000 {self.Cumulative_number_for_14_days_of_COVID_19_cases_per_100000}\n"""
 
 
 ##################### Main Script #####################
@@ -45,32 +78,9 @@ def create_table_SQL():
     Crea la base de datos con su correspondiente tabla "table_covid_world";
     '''
 
-    conn = sqlite3.connect('db_covid_world.db')
-    conn.execute("PRAGMA foreign_keys = 1")
-    c = conn.cursor()
+    db.drop_all()
 
-    c.execute("""
-            DROP TABLE IF EXISTS table_covid_world;
-            """)
-    
-    c.execute("""
-            CREATE TABLE table_covid_world(
-            [id] INTEGER PRIMARY KEY AUTOINCREMENT,
-            [date_rep] DATE,
-            [year_week] TEXT,
-            [cases_weekly] INTEGER,
-            [deaths_weekly] INTEGER,
-            [countries_and_territories] TEXT,
-            [geo_id] TEXT,
-            [country_territory_Code] TEXT,
-            [pop_data_2019] INTEGER,
-            [continent_exp] TEXT,
-            [Cumulative_number_for_14_days_of_COVID_19_cases_per_100000] TEXT
-            );
-            """)
-    
-    conn.commit()
-    conn.close()
+    db.create_all()
 
 
 def actualise_table_SQL():
@@ -88,18 +98,24 @@ def actualise_table_SQL():
     data = json_data.get('records')
 
     for datum in data:
-        c.execute("""
-                INSERT INTO table_covid_world 
-                (date_rep, year_week, cases_weekly, deaths_weekly, countries_and_territories,
-                geo_id, country_territory_Code, pop_data_2019, continent_exp, 
-                Cumulative_number_for_14_days_of_COVID_19_cases_per_100000)
-                VALUES ('{}', strftime('%Y-%W','{}'), {}, {}, '{}', '{}', '{}', '{}', '{}', '{}');
-                """ .format(datum["dateRep"],datum["dateRep"],datum["cases"],datum["deaths"],datum["countriesAndTerritories"],
-                datum["geoId"],datum["countryterritoryCode"],datum["popData2019"],datum["continentExp"],
-                datum["Cumulative_number_for_14_days_of_COVID-19_cases_per_100000"]))
+        # c.execute("""
+        #         INSERT INTO table_covid_world 
+        #         (date_rep, year_week, cases_weekly, deaths_weekly, countries_and_territories,
+        #         geo_id, country_territory_Code, pop_data_2019, continent_exp, 
+        #         Cumulative_number_for_14_days_of_COVID_19_cases_per_100000)
+        #         VALUES ('{}', strftime('%Y-%W','{}'), {}, {}, '{}', '{}', '{}', '{}', '{}', '{}');
+        #         """ .format(datum["dateRep"],datum["dateRep"],datum["cases"],datum["deaths"],datum["countriesAndTerritories"],
+        #         datum["geoId"],datum["countryterritoryCode"],datum["popData2019"],datum["continentExp"],
+        #         datum["Cumulative_number_for_14_days_of_COVID-19_cases_per_100000"]))
+        insert_datum = table_covid_world(date_rep=datum["dateRep"],year_week=(datum["dateRep"].strftime("%y-%W")),
+                                        cases_weekly=datum["cases"],deaths_weekly=datum["deaths"],
+                                        countries_and_territories=datum["countriesAndTerritories"],
+                                        geo_id=datum["geoId"],country_territory_Code=datum["countryterritoryCode"],
+                                        pop_data_2019=datum["popData2019"],continent_exp=datum["continentExp"],
+                                        Cumulative_number_for_14_days_of_COVID_19_cases_per_100000=datum["Cumulative_number_for_14_days_of_COVID-19_cases_per_100000"])
+        db.session.add(insert_datum)
     
-    conn.commit()
-    conn.close()
+    db.session.commit()
 
 
 def list_all_countries():
@@ -120,3 +136,7 @@ def list_all_countries():
     conn.close()
 
     return all_countries
+
+
+if __name__=="__main__":
+    create_table_SQL()

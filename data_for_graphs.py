@@ -13,6 +13,11 @@ Funciones:
  7. line_graph_per_country(country)
 '''
 
+__author__ = "Pablo Martin Ruiz Diaz"
+__email__ = "rd.pablo@gmail.com"
+__version__ = "2.0"
+
+
 ##################### Librerias #####################
 import requests
 import json
