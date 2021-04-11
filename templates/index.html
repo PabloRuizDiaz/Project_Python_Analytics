@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -12,6 +13,7 @@
 
     <title>Proyecto - Covid19 over the world</title>
 </head>
+
 <body>
    <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -21,8 +23,15 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Data Base</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/create_table">Delete and Create Table</a></li>
+                            <li><a class="dropdown-item" href="/create_table">Reset Table</a></li>
                             <li><a class="dropdown-item" href="/actualise_table">Actualise Table</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Machine Learning</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/">...</a></li>
+                            <li><a class="dropdown-item" href="/">...</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -30,11 +39,12 @@
                     </li>   
                 </ul>
             </div>
+            <img src="data:image/png;base64,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" class="img-thumbnail" height="150" width="150">
         </div>
     </nav>
         
     <!-- Main Title -->
-    <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+    <div class="p-3 mb-2 bg-secondary text-white">
         <h1 class="display-4 font-italic text-center">Proyecto Final Python Analytics</h1>
         <p class="lead my-3 text-center">En el presente website se visualizaran diversos graficos extraidos desde un json por una web 
             oficial de la Union Europea sobre el avance del Covid-19 a lo largo del mundo.</p>
@@ -43,7 +53,7 @@
     
     <!-- START THE FEATURE SECTIONS -->
     <div>
-        <!-- First dividing line -->        
+        <!-- First section -->        
         <hr class="featurette-divider"> 
         <div class="row featurette">
             <div class="col-md-7 px-5">
@@ -55,7 +65,7 @@
             </div>
         </div>
         
-        <!-- Second dividing line -->
+        <!-- Second section -->
         <hr class="featurette-divider"> 
         <div class="row featurette">
             <div class="col-md-7 px-5">
@@ -67,7 +77,7 @@
             </div>
         </div>
         
-        <!-- Third dividing line -->
+        <!-- Third section -->
         <hr class="featurette-divider"> 
         <div class="row featurette">
             <div class="col-md-7 px-5">
@@ -79,7 +89,7 @@
             </div>
         </div>
 
-        <!-- Fourth dividing line -->
+        <!-- Fourth section -->
         <hr class="featurette-divider"> 
         <div class="row featurette">
             <div class="col-md-7 px-5">
@@ -91,7 +101,7 @@
             </div>
         </div>
         
-        <!-- Fifth dividing line -->
+        <!-- Fifth section -->
         <hr class="featurette-divider"> 
         <div class="row featurette">
             <div class="col-md-7 px-5">
@@ -103,7 +113,7 @@
             </div>
         </div>
         
-        <!-- Sixth dividing line -->
+        <!-- Sixth section -->
         <hr class="featurette-divider"> 
         <div class="row featurette">
             <div class="col-md-7 px-5">
@@ -115,7 +125,7 @@
             </div>
         </div>
         
-        <!-- Seventh dividing line -->
+        <!-- Seventh section -->
         <hr class="featurette-divider"> 
         <div class="row featurette">
             <div class="col-md-7 px-5">
@@ -139,12 +149,11 @@
     <!-- /END THE FEATURE SECTIONS -->
         
     <!-- FOOTER -->
-    <footer class="container">
-        <p class="float-end"><a href="#">Back to top</a></p>
-        <p>2020-2021 Inove School. &middot; <a href="https://inove.com.ar/">Website</a> &middot; <a href="https://inove.com.ar/desarrolladorpython/">Curso Python Developer</a></p>
-    </footer>
-
+    <div class="p-3 mb-2 bg-dark text-white">
+        <footer class="container">
+            <p class="float-end"><a href="#">Back to top</a></p>
+            <p>2020-2021 Inove School. &middot; <a href="https://inove.com.ar/">Website</a> &middot; <a href="https://inove.com.ar/desarrolladorpython/">Curso Python Developer</a></p>
+        </footer>
+    </div>
 </body>
-
-
 </html>

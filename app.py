@@ -25,8 +25,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, RadioField, SelectField, TextField, TextAreaField, SubmitField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, Length
-# Librerias para Bootstrap
-from flask_bootstrap import Bootstrap
 # Librerias para graficos
 import matplotlib.pyplot as plt
 import matplotlib
@@ -48,9 +46,8 @@ config_path_name = os.path.join(script_path, 'config.ini')
 db_data = config('db', config_path_name)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_data['database']}"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
-
-Bootstrap(app)
 
 
 ##################### Formularios #####################
@@ -58,6 +55,10 @@ class InfoForm1(FlaskForm):
     country = SelectField('Selecciona el Pais:',
                             validators=[DataRequired()])
     submit = SubmitField('Cargar')
+
+
+##################### Se crea por primera vez la BD #####################
+data_base.create_table_SQL()
 
 
 ##################### Main Script #####################
@@ -70,15 +71,15 @@ def index():
 
     if form.is_submitted():
         country = form.country.data
-        
+
         return redirect(url_for('line_graph_per_country',country=country))
-    
+
     return render_template('index.html',form=form)
 
 
 @app.route('/create_table')
 def create_table():
-    data_base.create_table_SQL()
+    data_base.reset_table_SQL()
     return redirect(url_for('index'))
 
 
@@ -100,7 +101,7 @@ def bar_graph_continent():
     ax.bar(row[2][1], row[2][0], label=f'{row[2][1]}')
     ax.bar(row[3][1], row[3][0], label=f'{row[3][1]}')
     ax.bar(row[4][1], row[4][0], label=f'{row[4][1]}')
-    
+
     ax.set_facecolor('whitesmoke')
     ax.legend()
 
@@ -124,7 +125,7 @@ def bar_graph_continent_death():
     ax.bar(row[2][1], row[2][0], label=f'{row[2][1]}')
     ax.bar(row[3][1], row[3][0], label=f'{row[3][1]}')
     ax.bar(row[4][1], row[4][0], label=f'{row[4][1]}')
-    
+
     ax.set_facecolor('whitesmoke')
     ax.legend()
 
@@ -134,49 +135,49 @@ def bar_graph_continent_death():
     plt.close(fig)
 
     return Response(img.getvalue(), mimetype='image/png')
-    
+
 
 @app.route('/ranking_table_graph')
 def ranking_table_graph():
     row = data_for_graphs.ranking_table_graph()
-    
-    val1 = ['Countries and Territories', 'Cases per week', 'Average (%)'] 
+
+    val1 = ['Countries and Territories', 'Cases per week', 'Average (%)']
     val2 = [[i[n] for n in range(3)] for i in row]
-    
+
     fig = plt.figure()
     ax = fig.add_subplot()
     ax.set_axis_off()
 
     ax.table(cellText = val2, colLabels = val1, colColours =["palegreen"] * 10, cellLoc ='center', loc ='center')
-    ax.set_title('Tabla Top 10: Contagios por Pais') 
-    
+    ax.set_title('Tabla Top 10: Contagios por Pais')
+
     img = io.BytesIO() # data can be kept as bytes in an in-memory buffer when we use the io module’s Byte IO operations.
     fig.savefig(img) # image is saved in the 'img' variable
     FigureCanvas(fig).print_png(img)
     plt.close(fig)
-    
+
     return Response(img.getvalue(), mimetype='image/png')
 
 
 @app.route('/ranking_table_graph_death')
 def ranking_table_graph_death():
     row = data_for_graphs.ranking_table_graph_death()
-    
-    val1 = ['Countries and Territories', 'Deaths per week', 'Average (%)'] 
+
+    val1 = ['Countries and Territories', 'Deaths per week', 'Average (%)']
     val2 = [[i[n] for n in range(3)] for i in row]
-    
+
     fig = plt.figure()
     ax = fig.add_subplot()
     ax.set_axis_off()
 
     ax.table(cellText = val2, colLabels = val1, colColours =["palegreen"] * 10, cellLoc ='center', loc ='center')
-    ax.set_title('Tabla Top 10: Contagios por Pais') 
-    
+    ax.set_title('Tabla Top 10: Contagios por Pais')
+
     img = io.BytesIO() # data can be kept as bytes in an in-memory buffer when we use the io module’s Byte IO operations.
     fig.savefig(img) # image is saved in the 'img' variable
     FigureCanvas(fig).print_png(img)
     plt.close(fig)
-    
+
     return Response(img.getvalue(), mimetype='image/png')
 
 
@@ -205,12 +206,12 @@ def line_graph():
     ax.set_xlabel("Number of week")
     plt.xticks(week_year, rotation ='vertical')
     ax.legend()
-    
+
     img = io.BytesIO() # data can be kept as bytes in an in-memory buffer when we use the io module’s Byte IO operations.
     fig.savefig(img) # image is saved in the 'img' variable
     FigureCanvas(fig).print_png(img)
     plt.close(fig)
-    
+
     return Response(img.getvalue(), mimetype='image/png')
 
 
@@ -239,12 +240,12 @@ def line_graph_death():
     ax.set_xlabel("Number of the week")
     plt.xticks(week_year, rotation ='vertical')
     ax.legend()
-    
+
     img = io.BytesIO() # data can be kept as bytes in an in-memory buffer when we use the io module’s Byte IO operations.
     fig.savefig(img) # image is saved in the 'img' variable
     FigureCanvas(fig).print_png(img)
     plt.close(fig)
-    
+
     return Response(img.getvalue(), mimetype='image/png')
 
 
@@ -269,12 +270,12 @@ def line_graph_per_country():
     ax.set_xlabel("Number of the week")
     plt.xticks(week_year, rotation ='vertical')
     ax.legend()
-    
+
     img = io.BytesIO() # data can be kept as bytes in an in-memory buffer when we use the io module’s Byte IO operations.
     fig.savefig(img) # image is saved in the 'img' variable
     FigureCanvas(fig).print_png(img)
     plt.close(fig)
-    
+
     return Response(img.getvalue(), mimetype='image/png')
 
 
